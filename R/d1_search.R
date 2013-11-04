@@ -2,24 +2,46 @@
 
 #' Search the dataone repository by fields
 #' @param query the search query (character string)
-#' @param fuzzy_matching logical indicating whether fuzzy or only exact matches should be returned.  
+#' @param named string providing optional filters for the search, 
+#' e.g. c(author = "Wolkovich", identifier = "doi"), 
+#' @param fuzzy logical indicating whether fuzzy or only exact matches should be returned.  
 #' @details The current possible query terms for both search and return fields are given here: https://mule1.dataone.org/ArchitectureDocs-current/design/SearchMetadata.html#attribute-descriptions-and-notes 
 #' @import httr
 #' @export
-d1_search <- function(query, search_field, 
+#' @examples
+#' \dontrun{
+#'  d1_search("Boettiger", "author")
+#' }
+d1_search <- function(query, 
+                      search_field, 
+                      filter = NULL,
                       return_fields = c("identifier"),
-                      fuzzy = TRUE, rows = 100, 
-                      format = c("xml", "json", "csv")){
+                      fuzzy = TRUE, 
+                      rows = 100, 
+                      format = c("xml", "json", "csv"),
+                      node = "https://cn.dataone.org/cn/v1",
+                      engine = "solr"){
 
   format <- match.arg(format)
-  base <- "https://cn.dataone.org/cn/v1/"
-  action <- "query/solr/"
-  if(fuzzy_matching) 
+  action <- paste0("/query/", engine, "/") 
+  if(fuzzy){ 
     query <- paste0("*", query)
-  url <- paste0(base, action, 
-                "?q=", search_field, ":", query, 
-                "&fl=", paste(return_fields, collapse=","),
-                "&rows=", rows, "&wt=", format)
+    filter <- paste0("*", query)
+  }
+  if(!is.null(filter))
+   filter <- paste0("&fq=", paste(names(filter), filter, sep=":", collapse=","))
+
+  url <- paste0(node, 
+                action, 
+                "?q=", 
+                search_field, 
+                ":", query, 
+                "&fl=", 
+                paste(return_fields, collapse=","),
+                "&rows=", 
+                rows, 
+                "&wt=", 
+                format)
   GET(url)
 }
 

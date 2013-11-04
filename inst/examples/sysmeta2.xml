@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<d1:systemMetadata xmlns:d1="http://ns.dataone.org/service/types/v1">
+  <identifier>urn:uuid:289d3f4b-553b-4284-8bed-0cef6f828d7d</identifier>
+  <formatId>eml://ecoinformatics.org/eml-2.1.1</formatId>
+  <size>8477</size>
+  <checksum algorithm="MD5">1acd5c92292c06dfdf1f487327b411f8</checksum>
+  <rightsHolder>uid=boettiger,o=unaffiliated</rightsHolder>
+</d1:systemMetadata>
+
